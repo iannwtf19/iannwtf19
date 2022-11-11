@@ -3,14 +3,18 @@ from Layer import Layer
 
 class MultiLayerPerceptron:
 
-    def __init__(self):
-        self.hidden_layer = Layer(10, 1)
-        self.output_layer = Layer(1, 10)
+    def __init__(self, layers):
+        self.layers = layers
 
     def forward_step(self, x, target):
-        self.hidden_layer(x)
-        self.output_layer(self.hidden_layer.activation, target)
+        inputs = x
+        for layer in self.layers[:-1]:
+            layer(inputs)
+            inputs = layer.activation
+        self.layers[-1](inputs, target)
 
     def backpropagation(self, learning_rate=0.01):
-        self.output_layer.backward_step(learning_rate)
-        self.hidden_layer.backward_step(learning_rate, self.output_layer.error_signal, self.output_layer.weight_matrix)
+        self.layers[-1].backward_step(learning_rate)
+        next_layer = self.layers[-1]
+        for layer in reversed(self.layers[:-1]):
+            layer.backward_step(learning_rate, next_layer.error_signal, next_layer.weight_matrix)
