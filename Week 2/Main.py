@@ -18,7 +18,7 @@ targets = target_function(inputs)
 # pyplot.title("t = x^3 - x^2 + 1")
 # pyplot.show()
 
-learning_rate = 0.02
+learning_rate = 0.001
 mlp = MultiLayerPerceptron([Layer(10, 1), Layer(1, 10)])
 
 loss = []
